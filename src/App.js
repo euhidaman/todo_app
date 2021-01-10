@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import Todo from './Todo';
+import { Button, FormControl, Input, InputLabel } from '@material-ui/core';
 import './App.css';
 
-//1:00:00
+//1:25:00
 function App() {
   const [todos, setTodos] = useState(['Become Successful', 'Go earn money !!', 'I am rich']);
   // Creates a variable called todos , and let's us update and append items to it using setTodos(set~Variablenameincamelcase~)
@@ -25,17 +27,27 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Hello Aman !!!</h1>
+      <h1>⚛ React ToDo List ⚛</h1>
 
       <form>
-        <input value={input} onChange={event => setInput(event.target.value)} />
-        <button type='submit' onClick={addTodo}>Add ToDo</button>
+
+        <FormControl>
+          <InputLabel >✍Write a ToDo</InputLabel>
+          <Input value={input} onChange={event => setInput(event.target.value)}  />
+        </FormControl>
+
+        <Button disabled={!input /*This tells tht, if input is blank, don't add anything to todos*/}  
+         type='submit' onClick={addTodo} variant="contained" color="primary">
+          Add ToDo
+        </Button>
       </form>
       
 
       <ul>
         {todos.map(todo => (
-          <li>{todo}</li>
+          // the below line is passed to Todo.js
+          <Todo text={todo}/>
+          // <li>{todo}</li>
         ))}
       </ul>
     </div>
