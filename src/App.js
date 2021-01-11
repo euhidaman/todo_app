@@ -3,6 +3,7 @@ import Todo from './Todo';
 import { Button, FormControl, Input, InputLabel } from '@material-ui/core';
 import './App.css';
 import db from './firebase';
+import firebase from 'firebase';
 
 /*
 Note --> All the components file name starts with capital.
@@ -12,7 +13,7 @@ The main reason behind this is, because, when the number of files grow in the pr
 then we can easily find the components file , bcz their name starts in capital
 */
 
-//1:52:00
+//2:15:00
 function App() {
   const [todos, setTodos] = useState([]);
   // Creates a variable called todos , and let's us update and append items to it using setTodos(set~Variablenameincamelcase~)
@@ -30,14 +31,16 @@ function App() {
   // in this case 'input' --> if change happens, thn it runs again
   
   useEffect(() => {
-    db.collection('todos').onSnapshot(snapshot => {
+    // timestamp is also an input field --> check line 60
+    // .orderBy('timestamp,'desc') sorts the data in descending order of timestamp
+    db.collection('todos').orderBy('timestamp','desc').onSnapshot(snapshot => {
       // 1:48:29
       // doc.data returns an object
-      console.log(snapshot.docs.map(doc => doc.data()));
+      // console.log(snapshot.docs.map(doc => doc.data()));
       //---------------Important--> to show from firebase db ------------------//
       // so, basically , we are setting this value -->  
       // 'snapshot.docs.map(doc => doc.data().todo)' to todos
-      setTodos(snapshot.docs.map(doc => doc.data().todo))
+      setTodos(snapshot.docs.map(doc => ({id: doc.id, todo: doc.data().todo})))
     })
   }, []);
 
@@ -53,7 +56,8 @@ function App() {
     //The below code, takes and adds the input to the firebase db
     //so, basically it takes and updates with a new snapshot, each time an input is given 
     db.collection('todos').add({
-      todo: input
+      todo: input,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
     })
 
     //below, line clears the input field, and sets it back to empty ''
@@ -73,7 +77,7 @@ function App() {
 
         <Button disabled={!input} /*This tells tht, if input is blank, don't add anything to todos*/
          type='submit' onClick={addTodo} variant="contained" color="primary">
-          Add ToDo
+          ✅ADD
         </Button>
       </form>
       
@@ -82,7 +86,7 @@ function App() {
         {/* The below line or map() means --> for todo in todos */}
         {todos.map(todo => (
           // the below line is passed to Todo.js, and the props passed is 'todo'
-          <Todo text={todo}/>
+          <Todo todo={todo}/>
         ))}
       </ul>
     </div>
