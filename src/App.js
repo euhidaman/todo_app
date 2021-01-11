@@ -34,6 +34,7 @@ function App() {
       // 1:48:29
       // doc.data returns an object
       console.log(snapshot.docs.map(doc => doc.data()));
+      //---------------Important--> to show from firebase db ------------------//
       // so, basically , we are setting this value -->  
       // 'snapshot.docs.map(doc => doc.data().todo)' to todos
       setTodos(snapshot.docs.map(doc => doc.data().todo))
@@ -47,9 +48,14 @@ function App() {
     // react refreshes the page, when we click on form's submit button. 
     // To prevent the page frm refreshing, the below code is used
     event.preventDefault(); 
-    // [...todos] is showing the previous contents of the todos array using spread operator(...)
-    // and, [...todos, input] is appending the value of 'input' to the previous contents of the array 'todos'
-    setTodos([...todos, input]);
+    
+    //-------------Important--> to add to firebase db -----------------//
+    //The below code, takes and adds the input to the firebase db
+    //so, basically it takes and updates with a new snapshot, each time an input is given 
+    db.collection('todos').add({
+      todo: input
+    })
+
     //below, line clears the input field, and sets it back to empty ''
     setInput('');
   }
