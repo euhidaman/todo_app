@@ -13,7 +13,7 @@ The main reason behind this is, because, when the number of files grow in the pr
 then we can easily find the components file , bcz their name starts in capital
 */
 
-//2:15:00
+//2:40:30
 function App() {
   const [todos, setTodos] = useState([]);
   // Creates a variable called todos , and let's us update and append items to it using setTodos(set~Variablenameincamelcase~)
